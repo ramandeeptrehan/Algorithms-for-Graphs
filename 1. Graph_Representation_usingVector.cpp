@@ -1,6 +1,6 @@
 ////
 ////  1. Graph_Representation_usingVector.cpp
-////  1. Graph Representation (using vector and pair)
+////     Graph Representation (using vector and pair)
 ////
 ////  Created by Ramandeep Singh Trehan on 22/08/16.
 ////  Copyright © 2016 Ramandeep Singh Trehan. All rights reserved.
