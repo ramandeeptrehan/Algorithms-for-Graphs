@@ -58,7 +58,7 @@ int main()
             
         }
     }
-    
+    cout<<"Printing the graph: "<<endl;
     printGraph(n, e, adjList);
     
 }
