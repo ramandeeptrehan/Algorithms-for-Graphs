@@ -1,17 +1,19 @@
 ////
-////  1. Graph_Representation_usingVector.cpp
-////     Graph Representation (using vector and pair)
+////  main.cpp
+////  1. Graph Representation (using vector and pair)
 ////
 ////  Created by Ramandeep Singh Trehan on 22/08/16.
 ////  Copyright © 2016 Ramandeep Singh Trehan. All rights reserved.
 ////
 //
+// Time complexity: O(n+e), which is nothing but O(e), since #edges(e) can reach max upto O(n^2)
 #include<iostream>
 #include<vector>
 
 using namespace std;
 
-void inputGraph(int numberOfEdges, vector<vector<pair<int, int> > > & adjList)
+// Time complexity: O(e)
+void inputGraph(int numberOfEdges, vector<vector<pair<int, int> > > & adjList) // adjList was passed, which is base address of data structure
 {
     int u, v, weight;
   
@@ -26,6 +28,7 @@ void inputGraph(int numberOfEdges, vector<vector<pair<int, int> > > & adjList)
     
 }
 
+// Time complexity: O(n+e). This is simple traversal of a graph
 void printGraph(int numberOfNodes, int numberOfEdges, vector<vector<pair<int, int> > > & adjList)
 {
     for(int i=1; i<=numberOfNodes; i++)
@@ -47,18 +50,9 @@ int main()
     cin>>n>>e;
     vector<vector<pair<int, int>>> adjList(n+1); //will access n nodes from 1 to n
     
-    inputGraph(e, adjList);
+    inputGraph(e, adjList); //passing adjList implies the base address of adjList data structure
     
-    for(int i=1; i<=n; i++)
-    {
-        for(int j=0; j<(int)adjList[i].size(); j++)
-        {
-            cout<<"Edge is: " <<i<< "-->" << adjList[i][j].first<<endl;
-            cout<<"Weight is: "<< adjList[i][j].second<<endl;
-            
-        }
-    }
-    cout<<"Printing the graph: "<<endl;
+    
     printGraph(n, e, adjList);
     
 }
