@@ -51,8 +51,7 @@ int main()
     vector<vector<pair<int, int>>> adjList(n+1); //will access n nodes from 1 to n
     
     inputGraph(e, adjList); //passing adjList implies the base address of adjList data structure
-    
-    
+    // Printing the graph 
     printGraph(n, e, adjList);
     
 }
