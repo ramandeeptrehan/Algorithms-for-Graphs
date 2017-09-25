@@ -45,6 +45,9 @@ int* calculateIndegree(vector<vector<pair<int, int> > > &graph, int nodes)
     inDegree = (int*)malloc(sizeof(int)*(nodes+1));
     
     for(int i=1; i<=nodes; i++)
+        inDegree[i]=0;
+    
+    for(int i=1; i<=nodes; i++)
         for(int j=0; j<graph[i].size(); j++)
         {
             inDegree[graph[i][j].first]++;
@@ -53,17 +56,21 @@ int* calculateIndegree(vector<vector<pair<int, int> > > &graph, int nodes)
     return inDegree;
 }
 
-int findZeroIndegreeNode(int *inDegree, int nodes)
+int* findZeroIndegreeNodes(int *inDegree, int nodes, int *zeroIndegreeNodes)
 {
+    int k = 1;
+    
     for(int i=1; i<=nodes; i++)
     {
         if(inDegree[i]==0)
         {
-            return i;
+            zeroIndegreeNodes[k++] = i;
         }
         
     }
-    return -1; //case of DAG
+    
+    return zeroIndegreeNodes;
+    
 }
 
 void topologicalSorting(vector<vector<pair<int, int> > > &graph, int nodes, int edges)
@@ -72,25 +79,38 @@ void topologicalSorting(vector<vector<pair<int, int> > > &graph, int nodes, int 
     int *inDegree;
     inDegree = calculateIndegree(graph, nodes);
     
-    int firstNode = findZeroIndegreeNode(inDegree, nodes);
+    int *zeroIndegreeNodes;
+    zeroIndegreeNodes = (int*)malloc(sizeof(int)*(nodes+1));
     
-    if(firstNode==-1)
-    {
-        cout<<"This graph has a cycle\n";
-        return;
-    }
+    for(int i=1; i<=nodes; i++)
+        zeroIndegreeNodes[i] = 0;
     
-    //Push this node to queue
+    zeroIndegreeNodes = findZeroIndegreeNodes(inDegree, nodes, zeroIndegreeNodes);
+    
+    // Push all 0 indegree elements to queue.
+    // Why? If graph has 3 nodes, 2 edges as 1->2, 3->2. Then we need to add both 1 and 3 to the queue
+    
+    
     queue<int> q;
-    q.push(firstNode);
-    count++;  //increment whenever node pushed to queue
-    
+    for(int i=1; i<=nodes; i++)
+    {
+        if(zeroIndegreeNodes[i] != 0)
+        {
+            q.push(zeroIndegreeNodes[i]);
+            count++;  //increment whenever node pushed to queue
+        }
+    }
+
     int *visited;
     visited = (int*)malloc(sizeof(int)*(nodes+1));
+    for(int i=1; i<=nodes; i++)
+        visited[i] = 0;
+    
     
     while(q.empty()==0)
     {
         int element = q.front();
+        
         q.pop();
         visited[element]=1;
         
@@ -100,7 +120,9 @@ void topologicalSorting(vector<vector<pair<int, int> > > &graph, int nodes, int 
         for(int i=0; i<graph[element].size(); i++)
         {
             vertex = graph[element][i].first;
+
             inDegree[vertex]--;
+           
             if(inDegree[vertex] == 0 && visited[vertex]==0)
             {
                 q.push(vertex);
@@ -129,7 +151,7 @@ int main()
     
     inputGraph(graph, e);
     
-    printGraph(graph, n, e);
+    // printGraph(graph, n, e);
     
     cout<<"Topological Sorting Order in the Graph is: "<<endl;
     topologicalSorting(graph, n, e);
