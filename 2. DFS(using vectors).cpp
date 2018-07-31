@@ -1,94 +1,66 @@
 //
-//  DFS(using vector).cpp
+//  main.cpp
 //  2. DFS
 //
-//  Created by Ramandeep Singh Trehan on 23/08/16.
-//  Copyright © 2016 Ramandeep Singh Trehan. All rights reserved.
+//  Created by Ramandeep Singh Trehan on 31/07/18.
+//  Copyright © 2018 Ramandeep Singh Trehan. All rights reserved.
 //
 
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
-void inputGraph(int numberOfEdges, vector<vector<pair<int, int> > > & adjList)
+void inputGraph(vector<vector<pair<int, int>>> &graph, int e)
 {
     int u, v, weight;
     
-    for(int i=0; i<numberOfEdges; i++)
+    for(int i=0; i<e; i++)
     {
-        cout<<"Enter u and v (u-->v)\n";
+        cout<<"Enter edge: u-->v\n";
         cin>>u>>v;
-        cout<<"Enter weight of edge: \n";
+        cout<<"Enter weight of edge:\n";
         cin>>weight;
-        adjList[u].push_back(make_pair(v, weight));
-    }
-    
-}
-
-
-void printGraph(int numberOfNodes, int numberOfEdges, vector<vector<pair<int, int> > > & adjList)
-{
-    for(int i=1; i<=numberOfNodes; i++)
-    {
-        for(int j=0; j<adjList[i].size(); j++)
-        {
-            cout<<"Edge is: " <<i<< "-->" << adjList[i][j].first<<endl;
-            cout<<"Weight is: "<< adjList[i][j].second<<endl;
-            
-        }
+        
+        graph[u].push_back(make_pair(v, weight));
     }
 }
 
-void DFSUtil(int s, vector<vector<pair<int, int> > > & adjList, bool * visited)
+void DFSUtil(vector<vector<pair<int, int>>> &graph, bool *visited, int s)
 {
-    visited[s]=true;
+    visited[s] = true;
     cout<<s<<" ";
     
-    for(int i=0; i<adjList[s].size(); i++)
+    for(int i=0; i<graph[s].size(); i++)
     {
-        if(visited[adjList[s][i].first]==false)
-            DFSUtil(adjList[s][i].first, adjList, visited); //note: in u->v...passing the v
+        if(visited[graph[s][i].first] == false)
+            DFSUtil(graph, visited , graph[s][i].first);
     }
-
 }
 
-void DFS(int s, vector<vector<pair<int, int> > > & adjList, int n) // n is number of nodes in graph
+void DFS(vector<vector<pair<int, int>>> &graph, int n, int s)
 {
-    bool * visited = new bool[n+1]; //vertices from 1 to n
+    bool *visited = new bool[n+1]; //1 to n
     
     for(int i=1; i<=n; i++)
-    {
-        visited[i]=false;
-    }
+        visited[i] = false;
     
-    DFSUtil(s, adjList, visited);
-    
+    DFSUtil(graph, visited, s);
 }
 
-int main()
-{
-    int n, e, s;
-    cout<<"Enter the number of nodes(n) and edges(e) you want in the graph: \n";
+int main(int argc, const char * argv[]) {
+    int n, e;
+    int s;
+    
+    cout<<"Enter number of nodes(n) and edges(e) in the graph:\n";
     cin>>n>>e;
-    vector<vector<pair<int, int>>> adjList(n+1); //will access n nodes from 1 to n
     
-    inputGraph(e, adjList);
+    vector<vector<pair<int, int>>> graph(n+1);
     
-    for(int i=1; i<=n; i++)
-    {
-        for(int j=0; j<(int)adjList[i].size(); j++)
-        {
-            cout<<"Edge is: " <<i<< "-->" << adjList[i][j].first<<endl;
-            cout<<"Weight is: "<< adjList[i][j].second<<endl;
-            
-        }
-    }
-    cout<<"Printing the graph: "<<endl;
-    printGraph(n, e, adjList);
+    inputGraph(graph, e);
     
-    cout<<"Enter the vertex(1 to n) as a starting vertex for DFS: \n";
+    cout<<"Enter starting vertex(s) for Depth First Search: ";
     cin>>s;
-    DFS(s, adjList, n);
-    
+    DFS(graph, n, s);
+    return 0;
 }
